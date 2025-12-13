@@ -28,6 +28,8 @@ const App = () => {
   const incrementNeutral = () => setNeutral(neutral + 1)
   const incrementBad = () => setBad(bad + 1)
 
+  const total = good + neutral + bad;
+
   return (
     <div>
       <Heading text="give feedback" />
@@ -38,6 +40,9 @@ const App = () => {
       <Statistic name="good" value={good} />
       <Statistic name="neutral" value={neutral} />
       <Statistic name="bad" value={bad} />
+      <Statistic name="all" value={total} />
+      <Statistic name="average" value={(good - bad) / total} />
+      <Statistic name="positive" value={((100 * good) / total).toString() + ' %'} />
     </div>
   )
 }
