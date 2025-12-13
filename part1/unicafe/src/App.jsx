@@ -21,6 +21,12 @@ const Statistic = ({name, value}) => {
 const Statistics = ({good, neutral, bad}) => {
   const total = good + neutral + bad
 
+  if (total === 0) {
+    return (
+      <div>No feedback given</div>
+    )
+  }
+
   return (
     <div>
       <Statistic name="good" value={good} />
