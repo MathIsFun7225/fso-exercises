@@ -43,9 +43,13 @@ const App = () => {
       return
     }
 
-    const newPersons = [...persons]
-    newPersons.push(newPerson)
-    setPersons(newPersons)
+    axios
+      .post('http://localhost:3001/persons', newPerson)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setNewPerson({ name: '', number: '' })
+      })
+      .catch(error => console.log(error))
   }
 
   return (
