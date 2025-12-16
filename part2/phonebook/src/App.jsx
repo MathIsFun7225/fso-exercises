@@ -1,49 +1,52 @@
 import { useState } from 'react'
 
-const Numbers = (props) => {
+const Persons = (props) => {
   return (
     <div>
       <h2>Numbers</h2>
-      {props.persons.map(person => <div key={person.name}>{person.name}</div>)}
+      {props.persons.map(person => <div key={person.name}>{person.name} {person.number}</div>)}
     </div>
   )
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
-  ]) 
-  const [newName, setNewName] = useState('')
+  const [persons, setPersons] = useState([{ name: 'Arto Hellas', number: '040-123456 '}]) 
+  const [newPerson, setNewPerson] = useState({ name: '', number: '' })
 
   const handleNameChange = (event) => {
-    setNewName(event.target.value)
+    const person = {...newPerson}
+    person.name = event.target.value
+    setNewPerson(person)
   }
 
-  const addName = (event) => {
+  const handleNumberChange = (event) => {
+    const person = {...newPerson}
+    person.number = event.target.value
+    setNewPerson(person)
+  }
+
+  const addPerson = (event) => {
     event.preventDefault()
 
-    if (persons.find(element => (element.name === newName)) !== undefined) {
-      alert(`${newName} is already added to the phonebook`)
+    if (persons.find(element => (element.name === newPerson.name)) !== undefined) {
+      alert(`${newPerson.name} is already added to the phonebook`)
       return
     }
 
     const newPersons = [...persons]
-    newPersons.push({ name: newName })
+    newPersons.push(newPerson)
     setPersons(newPersons)
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
+      <form onSubmit={addPerson}>
+        <div> name: <input value={newPerson.name} onChange={handleNameChange} /> </div>
+        <div> number: <input value={newPerson.number} onChange={handleNumberChange} /> </div>
+        <div> <button type="submit">add</button> </div>
       </form>
-      <Numbers persons={persons} />
+      <Persons persons={persons} />
     </div>
   )
 }
