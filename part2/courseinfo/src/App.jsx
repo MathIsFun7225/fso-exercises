@@ -12,12 +12,13 @@ const Part = (props) => (
   </p>
 )
 
-const Total = (props) => <p>Number of exercises {props.total}</p>
+const Total = (props) => <p><b>total of {props.total} exercises</b></p>
 
 const Course = (props) => (
   <div>
     <Header course={props.course.name} />
     <Content parts={props.course.parts} />
+    <Total total={props.course.parts.reduce((accumulator, currentPart) => accumulator + currentPart.exercises, 0)} />
   </div>
 )
 
