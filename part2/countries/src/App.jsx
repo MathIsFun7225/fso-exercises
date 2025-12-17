@@ -8,6 +8,7 @@ const App = () => {
   const [query, setQuery] = useState('')
   const [allCountries, setAllCountries] = useState([])
   const [countries, setCountries] = useState([])
+  const [targetCountry, setTargetCountry] = useState(null)
   
   useEffect(() => {
     axios
@@ -22,13 +23,16 @@ const App = () => {
   const handleQueryChange = (event) => {
     const newQuery = event.target.value;
     setQuery(newQuery)
+    setTargetCountry(null)
     setCountries(allCountries.filter(country => country.name.common.toLowerCase().includes(newQuery.toLowerCase())))
   }
+
+  const showCountryView = (country) => () => setTargetCountry(country)
 
   return (
     <div>
       <Search query={query} handleQueryChange={handleQueryChange}/>
-      <Countries countries={countries} />
+      <Countries countries={countries} targetCountry={targetCountry} showCountryView={showCountryView} />
     </div>
   )
 }

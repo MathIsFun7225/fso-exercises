@@ -1,7 +1,11 @@
 import DetailedCountry from './DetailedCountry'
 import SimpleCountry from './SimpleCountry'
 
-const Countries = ({ countries }) => {
+const Countries = ({ countries, targetCountry, showCountryView }) => {
+  if (targetCountry !== null) {
+    return <DetailedCountry country={targetCountry} />
+  }
+
   if (countries.length === 0) {
     return <div>No matching countries</div>
   } else if (countries.length === 1) {
@@ -9,7 +13,7 @@ const Countries = ({ countries }) => {
   } else if (countries.length <= 10) {
     return (
       <div>
-        {countries.map(country => <SimpleCountry key={country.name.common} country={country} />)}
+        {countries.map(country => <SimpleCountry key={country.name.common} country={country} showCountryView={showCountryView} />)}
       </div>
     )
   } else {
