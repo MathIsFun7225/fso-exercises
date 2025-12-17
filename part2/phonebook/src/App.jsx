@@ -4,8 +4,11 @@ import axios from 'axios'
 import personService from './services/persons'
 
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -20,6 +23,7 @@ const App = () => {
   
   const [newPerson, setNewPerson] = useState({ name: '', number: '' })
   const [searchTerm, setSearchTerm] = useState('')
+  const [successMessage, setSuccessMessage] = useState(null)
 
   const handleNameChange = (event) => {
     const person = {...newPerson}
@@ -45,7 +49,11 @@ const App = () => {
       if (confirm(`${existingPerson.name} is already added to the phonebook, replace the old number with a new one?`)) {
         personService
           .update(existingPerson.id, { ...existingPerson, number: newPerson.number })
-          .then(updatedPerson => setPersons(persons.map(person => (person.id === existingPerson.id) ? updatedPerson : person)))
+          .then(updatedPerson => {
+            setPersons(persons.map(person => (person.id === existingPerson.id) ? updatedPerson : person))
+            setSuccessMessage(`Updated ${updatedPerson.name}`)
+            setTimeout(() => setSuccessMessage(null), 4000)
+          })
           .catch(error => console.log(error))
       }
     } else {
@@ -54,6 +62,8 @@ const App = () => {
         .then(createdPerson => {
           setPersons(persons.concat(createdPerson))
           setNewPerson({ name: '', number: '' })
+          setSuccessMessage(`Added ${newPerson.name}`)
+          setTimeout(() => setSuccessMessage(null), 4000)
         })
         .catch(error => console.log(error))
     }
@@ -73,6 +83,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage} />
       
       <Filter searchTerm={searchTerm} handleSearchTermChange={handleSearchTermChange} />
 
