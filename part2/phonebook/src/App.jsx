@@ -52,6 +52,17 @@ const App = () => {
       .catch(error => console.log(error))
   }
 
+  const deletePerson = (person) => () => {
+    if (confirm(`Delete ${person.name} ?`)) {
+      axios
+        .delete(`http://localhost:3001/persons/${person.id}`)
+        .then(response => {
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
+        .catch(error => console.log(error))
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -62,7 +73,7 @@ const App = () => {
       <PersonForm addPerson={addPerson} newPerson={newPerson} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
 
       <h3>Numbers</h3>
-      <Persons persons={persons.filter(person => person.name.toLowerCase().includes(searchTerm.toLowerCase()))} />
+      <Persons persons={persons.filter(person => person.name.toLowerCase().includes(searchTerm.toLowerCase()))} deletePerson={deletePerson} />
     </div>
   )
 }
