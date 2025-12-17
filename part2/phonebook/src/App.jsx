@@ -23,7 +23,9 @@ const App = () => {
   
   const [newPerson, setNewPerson] = useState({ name: '', number: '' })
   const [searchTerm, setSearchTerm] = useState('')
-  const [successMessage, setSuccessMessage] = useState(null)
+
+  const [message, setMessage] = useState(null)
+  const [status, setStatus] = useState('')
 
   const handleNameChange = (event) => {
     const person = {...newPerson}
@@ -51,10 +53,23 @@ const App = () => {
           .update(existingPerson.id, { ...existingPerson, number: newPerson.number })
           .then(updatedPerson => {
             setPersons(persons.map(person => (person.id === existingPerson.id) ? updatedPerson : person))
-            setSuccessMessage(`Updated ${updatedPerson.name}`)
-            setTimeout(() => setSuccessMessage(null), 4000)
+
+            setMessage(`Updated ${updatedPerson.name}`)
+            setStatus('success')
+            setTimeout(() => {
+              setMessage(null)
+              setStatus('')
+            }, 5000)
           })
-          .catch(error => console.log(error))
+          .catch(error => {
+            console.log(error)
+            setMessage(`information of ${existingPerson.name} has already been removed from the server`)
+            setStatus('error')
+            setTimeout(() => {
+              setMessage(null)
+              setStatus('')
+            }, 5000)
+          })
       }
     } else {
       personService
@@ -62,8 +77,13 @@ const App = () => {
         .then(createdPerson => {
           setPersons(persons.concat(createdPerson))
           setNewPerson({ name: '', number: '' })
-          setSuccessMessage(`Added ${newPerson.name}`)
-          setTimeout(() => setSuccessMessage(null), 4000)
+
+          setMessage(`Added ${newPerson.name}`)
+          setStatus('success')
+          setTimeout(() => {
+            setMessage(null)
+            setStatus('')
+          }, 5000)
         })
         .catch(error => console.log(error))
     }
@@ -83,7 +103,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={successMessage} />
+      <Notification message={message} status={status} />
       
       <Filter searchTerm={searchTerm} handleSearchTermChange={handleSearchTermChange} />
 
