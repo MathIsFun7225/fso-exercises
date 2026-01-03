@@ -1,10 +1,31 @@
 const express = require('express')
 const morgan = require('morgan')
 
+morgan.token('body', (request, response) => request.body)
+
 const app = express()
 
 app.use(express.json())
-app.use(morgan('tiny'))
+
+app.use(morgan((tokens, request, response) => {
+  const contentLength = tokens.res(request, response, 'content-length')
+
+  let result = [
+    tokens.method(request, response),
+    tokens.url(request, response),
+    tokens.status(request, response),
+    (contentLength && contentLength !== 0) ? contentLength : '-',
+    '-',
+    tokens['response-time'](request, response),
+    'ms'
+  ].join(' ')
+
+  if (tokens.method(request, response) === 'POST') {
+    result += ' ' + JSON.stringify(tokens.body(request, response))
+  }
+
+  return result
+}))
 
 let persons = [
   { 
