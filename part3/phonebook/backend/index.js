@@ -5,8 +5,8 @@ morgan.token('body', (request, response) => request.body)
 
 const app = express()
 
+app.use(express.static('dist'))
 app.use(express.json())
-
 app.use(morgan((tokens, request, response) => {
   const contentLength = tokens.res(request, response, 'content-length')
 
