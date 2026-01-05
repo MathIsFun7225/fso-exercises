@@ -56,7 +56,24 @@ app.get('/api/persons/:id', (request, response, next) => {
         .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.put('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+        .then(person => {
+          console.log(person)
+          if (person) {
+            person.name = request.body.name
+            person.number = request.body.number
+            return person.save().then(updatedPerson => {
+              response.json(updatedPerson)
+            })
+          } else {
+            response.status(404).end()
+          }
+        })
+        .catch(error => next(error))
+})
+
+app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
         .then(result => {
           response.status(204).end()
