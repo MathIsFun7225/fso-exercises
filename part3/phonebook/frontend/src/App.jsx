@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     personService.getAll().then(data => setPersons(data))
-  })
+  }, [])
   
   const [newPerson, setNewPerson] = useState({ name: '', number: '' })
   const [searchTerm, setSearchTerm] = useState('')
