@@ -10,16 +10,12 @@ import Persons from './components/Persons'
 
 import './index.css'
 
-const baseUrl = '/api/persons'
-
 const App = () => {
   const [persons, setPersons] = useState([])
 
   useEffect(() => {
-    axios
-      .get(baseUrl)
-      .then(response => {setPersons(response.data)})
-  }, [])
+    personService.getAll().then(data => setPersons(data))
+  })
   
   const [newPerson, setNewPerson] = useState({ name: '', number: '' })
   const [searchTerm, setSearchTerm] = useState('')
@@ -85,7 +81,9 @@ const App = () => {
             setStatus('')
           }, 5000)
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 
@@ -96,7 +94,7 @@ const App = () => {
         .then(deletedPerson => {
           setPersons(persons.filter(p => p.id !== person.id))
         })
-        .catch(error => console.log(error))
+        .catch(error => { console.log(error) })
     }
   }
 
